@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<form method="post" action="" style="width: 25%;margin-left: 35%;">
+    {% csrf_token %}
+    <div class="form-group">
+        <h2>Register</h2>
+        <div class="container ms-5">
+            {% for msg in messages %}
+            <p style="color: rgb(230, 44, 44);"> {{msg}} </p>
+            {% endfor %}
+        </div>
+      <label for="exampleInputEmail1">Username</label>
+      <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter your username" style="font-size: small;">
+      <small id="emailHelp" class="form-text text-muted"></small>
+   
+    </div>
+    <div class="form-group">
+      <label for="exampleInputPassword1">First Name</label>
+      <input type="text" class="form-control" name="first_name" placeholder="Enter your first name"style="font-size: small;">
+    </div>
+    <div class="form-group">
+        <label for="exampleInputPassword1">Last Name</label>
+        <input type="text" class="form-control" name="last_name" placeholder="Enter your last name" style="font-size: small;">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Phone Number</label>
+        <input type="number" class="form-control" name="phone_no" placeholder="Enter your phone number" style="font-size: small;">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Email</label>
+        <input type="email" class="form-control" name="email" placeholder="Enter your email" style="font-size: small;">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" class="form-control" name="password" placeholder="Enter your password" style="font-size: small;">
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Confirm Password</label>
+        <input type="password" class="form-control" name="password2" placeholder="Confirm your password" style="font-size: small;">
+      </div>
+
+    <button type="submit" style="background-color: rgb(4, 2, 26);border-radius: 4px;border: none;width:320px;height:40px;color: white;">Register</button>
+  </form>
+
+{%endblock%}

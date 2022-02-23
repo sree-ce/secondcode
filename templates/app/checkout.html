@@ -1,0 +1,237 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Checkout{% endblock title %}
+
+{% block css_block %}
+
+{%endblock%}
+
+{% block main-content %}
+
+<style>
+  .razorpay-payment-button {
+    background-color: rgb(218, 57, 57);
+    width: 200px;
+    height: 45px;
+    color: white;
+    border: none;
+    border-radius: 4px;
+
+  }
+</style>
+
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-sm-6">
+      <h4>Order Summary</h4>
+      <hr>
+      {% if cart_items %}
+      {% for cart in cart_items %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{cart.product.Name}}</h5>
+          <p>Quantity: {{cart.quantity}}</p>
+          <p class="fw-bold">Price: Rs.{{cart.total_cost}}</p>
+
+        </div>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="card mb-2">
+        <div class="card-body">
+          <h5>Product: {{product.Name}}</h5>
+          <p>Quantity: 1</p>
+          <p class="fw-bold">Price: Rs.{{product.total_price}}</p>
+
+        </div>
+      </div>
+      {% endif %}
+      {% if coupon %}
+      <p class="alert alert-light border">
+        Coupon Code Applied
+        You Have Got {{coupon.discount}}%
+      </p>
+      <p class="fw-bold">Total Cost + Rs.{{shipping_amount}} = {{total_amount}}</p>
+      {% else %}
+      <p class="fw-bold">Total Cost + Rs.{{shipping_amount}} = {{total_amount}}</p>
+      {% endif %}
+      <hr>
+      <div class="border p-4 rounded border-primary">
+        {% if coupon_message %}
+        <div class="alert alert-danger">{{coupon_message}}</div>
+        {% endif %}
+
+        {% for msg in messages %}
+        <p class="alert alert-light border text-warning " style="background-color:rgba(57, 232, 4, 0.131);">{{msg}} <i
+            class="fa fa-exclamation-triangle"></i> </p>
+        {% endfor %}
+        <p>Coupon Code</p>
+        <form action="" method="get">
+          <div class="col-lg-5">
+            <input type="text" name="couponcode" id="" class="form-control">
+            <br>
+
+            <button type="submit" class="btn btn-primary w-100">Apply Coupone</button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <div class="col-sm-5 offset-sm-1">
+      <div class="col-sm-5 offset-sm-1">
+        <h4>Select Shipping Address</h4>
+        <hr>
+        {% if add %}
+        {% for ad in add %}
+        <div class="card" style="width: 300px;">
+          <div class="card-body">
+            <h5 class="text-capitalize">{{ad.name}},{{ad.phone}}</h5>
+            <p>
+
+              {{ad.zipcode}},
+              {{ad.address}}</p>
+          </div>
+          <a href="{% url 'edit_address' ad.id %}" style="margin-left: 235px;text-decoration: none;"> <i
+            class="fa fa-edit "></i>Edit</button></a>
+        </div>
+        <form action="{% url 'paymentdone' 1 %}">
+          {% csrf_token %}
+          <div class="form-check mt-2 mb-3">
+            <input class="form-check-input" type="radio" name="custid" value="{{ad.id}}" id="custadd{{forloop.counter}}"
+              onclick="setVal({{ad.id}})">
+            <label class="form-check-label fw-bold" for="useradd{{forloop.counter}}">
+              Address: {{forloop.counter}} </label>
+            
+           <i class="fa fa-trash" style="color: blue;"
+                data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{ad.id}}"></i>
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModalCenter{{ad.id}}" tabindex="-1" role="dialog"
+              aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Delete product</h5><button type="button"
+                      class="close" data-bs-dismiss="modal" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span></button>
+                  </div>
+                  <div class="modal-body text-danger">Are you sure you want to delete?
+                  </div>
+                  <div class="modal-footer"> <button type="button"
+                      style="background-color: rgb(19, 19, 128);color: white;border-radius: 4px;border: none;"
+                      data-bs-dismiss="modal">Close</button> <a href="delete_address?id={{ad.id}}"
+                      class="text-light"><button type="button"
+                        style="background-color: red;border-radius: 4px;color:white;border: none;">Delete</button></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {% endfor %}
+          {% else %}
+          <div>Please create an adress</div>
+          {% endif %}
+
+
+        </form>
+
+        <a href="{% url 'add_address' %}"><button type="button" class="btn btn-primary">Add Address</button></a>
+
+        <hr style="width:350px;">
+        <form action="{% url 'paymentdone' 1 %}">
+          <div class="text-end">
+            <input type="hidden" name="ccustid" id="ad-id" value="">
+
+            <button type="submit" class="btn btn-primary mt-3  fw-bold" style="width: 200px;">Cash on delivery</button>
+          </div><br>
+        </form>
+        <div id="paypal-button-container"></div>
+
+        <form action="{% url 'paymentdone' 3 %}" method="get" id="myform">
+          <input type="hidden" name="cccustid" id="a-id" value="">
+
+        </form>
+
+
+        <form action="{% url 'paymentdone' 2 %}">
+
+          <script src="https://checkout.razorpay.com/v1/checkout.js" data-key="rzp_test_iezkDFZQFKkWjS" // Enter the
+            Test API Key ID generated from Dashboard → Settings → API Keys data-amount="{{amount}}" // Amount is in
+            currency subunits. Hence, 29935 refers to 29935 paise or ₹299.35. data-currency="INR" // You can accept
+            international payments by changing the currency code. Contact our Support Team to enable International for
+            your account data-order_id="{{payment.id}}" // Replace with the order_id generated by you in the backend.
+            data-buttontext="Pay with Razorpay" data-name="" data-description="" data-image=""
+            data-prefill.name="{{user}}" data-prefill.email="{{user.email}}" data-theme.color="#F37254"></script>
+          <!-- <input type="hidden" custom="Hidden Element" name="hidden"> -->
+          <input type="hidden" name="custid" id="add-id" value="">
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock main-content %}
+{% block payment-gateway%}
+<script
+  src="https://www.paypal.com/sdk/js?client-id=ATPuyG1lCNH4I3DpnPeOO0cqaaF84ohlYWo46cVhtuHnNq4XXU0Y0fHOJTeVNuPFJO4Z8Sss4qnfIPTS&currency=USD&disable-funding=credit,card"></script>
+
+<script>
+  // Render the PayPal button into #paypal-button-container
+  paypal.Buttons({
+
+    // Set up the transaction
+    createOrder: function (data, actions) {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '{{total_amount}}'
+
+          }
+
+        }]
+      });
+    },
+
+    // Finalize the transaction
+    onApprove: function (data, actions) {
+      return actions.order.capture().then(function (orderData) {
+        // Successful capture! For demo purposes:
+        console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+        var transaction = orderData.purchase_units[0].payments.captures[0];
+        alert('Transaction ' + transaction.status + ': ' + transaction.id + '\n\nSee console for all available details');
+
+
+
+
+        document.getElementById('myform').submit();
+
+
+
+        // Replace the above to show a success message within this page, e.g.
+        // const element = document.getElementById('paypal-button-container');
+        // element.innerHTML = '';
+        // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+        // Or go to another URL:  actions.redirect('thank_you.html');
+      });
+    }
+
+
+  }).render('#paypal-button-container');
+
+
+</script>
+<script>
+  function setVal(id) {
+    console.log(id)
+    document.getElementById('add-id').value = id
+    document.getElementById('ad-id').value = id
+    document.getElementById('a-id').value = id
+
+  }
+</script>
+
+
+{% endblock payment-gateway%}
+{% block razorpay %}
+
+{% endblock razorpay %}

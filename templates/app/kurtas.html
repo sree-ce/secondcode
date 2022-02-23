@@ -1,0 +1,141 @@
+{% extends 'app/header.html' %}
+{% load static %}
+{% block title %}Address{% endblock title %}
+{% block main-content %}
+
+<div style="margin-left: 30px; ">
+    <br>
+    <h3 style="text-align: center;"> Kurtas</h3>
+  </div>
+  <br>
+  {% for k in products %}
+  
+
+    <div class="card" style="width: 14rem; float: left; margin-left: 30px;">
+      <img src="{{k.images.url}}" class="card-img-top" alt="...">
+      <div class="card-body" style="background-color: rgba(175, 172, 172, 0.255);">
+  
+        <h5 class="card-title" style="color: black;">{{k.products.Name}}</h5>
+        {% if pdt.discount != 0 %}
+        <p class="card-text" style="font-size: medium;color: rgb(0, 0, 0);">
+          {{pdt.total_price}}Rs.<span class="card-text"
+            style="font-size: medium;color: rgb(82, 79, 79); text-decoration: line-through;">{{k.product.price}}Rs.</span>
+  
+          <span class="card-text" style="font-size: small;color: rgb(250, 30, 14); ">({{pdt.discount}}%)</span>
+        </p>
+        {% else %}
+        <p class="card-text" style="font-size: medium;color: rgb(0, 0, 0);">
+          {{pdt.total_price}}Rs.
+  
+          <span class="card-text"
+            style="font-size: small;color: rgb(250, 30, 14);  display: none;">({{pdt.discount}}%)</span>
+        </p>
+        {% endif %}
+  
+        <select name="size" onchange="getsize(event)" style="height: 20px;font-size: small;margin-left: 50px;">
+          <option>Choose Size</option>
+          {% for i in variation %}
+          {% if pdt == i.product %}
+          <option value="{{ i.variation_value }}">{{ i.variation_value }}</option>
+          {% endif %}
+          {% endfor %}
+        </select>
+  
+      </div>
+    
+  </a>
+  
+  <div class="row d-inline">
+  
+    <button type="button" onclick="cart({{pdt.id}})"
+      style="background-color: rgb(187, 9, 122);border: none;width: 50px;margin-left: 38px;">
+      <i class="fa fa-shopping-cart" style="color: rgb(255, 255, 255);"></i></button>
+  
+    {% if user %}
+  
+    <button type="button" onclick="buy({{pdt.id}})"
+      style="background-color: rgb(187, 9, 122);border: none;width: 70px; color: white;">
+      Buy</button>
+    {% else %}
+  
+    <button type="button" onclick="buy({{pdt.id}})"
+      style="background-color: rgb(187, 9, 122);border: none;width: 70px; color: white;display: none;">
+      Buy</button>
+    {% endif %}
+    {% if user %}
+    {% if pdt not in wishlist %}
+    <button type="button" onclick="wish({{pdt.id}})" style="background-color: rgb(187, 9, 122);border: none;width: 50px;">
+      <i class="fa fa-heart" style="color: rgb(255, 255, 255);"></i></button>
+    {% else %}
+    <button type="button" onclick="add_wish({{pdt.id}})"
+      style="background-color: rgb(187, 9, 122);border: none;width: 50px;">
+      <i class="fa fa-heart" style="color: rgb(0, 0, 0);"></i></button>
+    {% endif %}
+    {% endif %}
+  
+  </div>
+  
+  
+  </div>
+  
+  
+  {% endfor %}
+  
+  
+  </div>
+  <form action="/cartadd" method="get" id="cform">
+    <input type="hidden" id="get_size" name="get_size" value="">
+    <input type="hidden" id="mode" name="mode" value="">
+    <input type="hidden" id="proid" name="proid" value="">
+  </form>
+  <form action="wishlist" method="get" id="wish">
+    <input type="hidden" id="list" name="wish_list" value="">
+  </form>
+  </div>
+  {% block js_block %}
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script>
+    function getsize(e) {
+      console.log(e.target.value)
+      document.getElementById('get_size').value = e.target.value
+  
+    }
+    function cart(a) {
+      console.log(a)
+      document.getElementById('mode').value = 0
+      document.getElementById('proid').value = a
+      if (document.getElementById('get_size').value == '') {
+        swal.fire('choose size')
+      }
+      else {
+        document.getElementById('cform').submit();
+      }
+  
+    }
+    function buy(a) {
+      console.log(a)
+      document.getElementById('mode').value = 1
+      document.getElementById('proid').value = a
+      if (document.getElementById('get_size').value == '') {
+        swal.fire('choose size')
+      }
+      else {
+        document.getElementById('cform').submit();
+      }
+  
+  
+    }
+    function wish(a) {
+      document.getElementById('list').value = a
+      document.getElementById('wish').submit();
+    }
+    function add_wish() {
+      swal.fire('Already added to your wishlist')
+    }
+  </script>
+  
+  {% endblock %}
+
+{% endblock main-content %}

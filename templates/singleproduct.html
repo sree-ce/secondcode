@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+{% block content %}
+<!-- {% load static %}  -->
+{% block css_block %}
+<style>
+    .imgkey {
+        width: 50px;
+        height: 50px;
+        /*border: 2px solid black;*/
+
+    }
+
+    .previewPane {
+        /*display:inline-block:*/
+        /*border: 1px solid rgb(160, 159, 159);*/
+        width: 300px;
+        height: 400px;
+        background-repeat: no-repeat;
+        cursor: crosshair;
+        background-size: 100%;
+        margin-left: 100px;
+        margin-top: 30px;
+    }
+
+    #zoomer {
+        /* border: 2px solid black;*/
+        margin-top: 30px;
+        background: #fff;
+        display: none;
+        background-repeat: no-repeat;
+        width: 300px;
+        height: 400px;
+        z-index: 1000;
+        position: fixed;
+        right: 10%;
+        top: 13%;
+        border: none;
+    }
+
+    .imgkey {
+        display: none;
+    }
+</style>
+<script src="https//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+{%endblock%}
+<!-- ##### Single Product Details Area Start ##### -->
+<section class="single_product_details_area d-flex align-items-center">
+
+
+    <div class="container">
+        <div class="row ">
+            <div class="col-lg-6">
+                <div class="card " style="border: none;">
+                    <div class="previewPane"></div>
+
+                    <div id="zoomer"></div>
+                    <div class="imgline">
+
+                        <img src="{{products.images.url}}" class="imgkey " alt="...">
+                        <br>
+                        <img src="{{products.images2.url}}" class="imgkey " alt="...">
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="single_product_desc clearfix">
+                <span></span>
+                <a href="cart.html">
+                    <h2>{{products.Name}}</h2>
+                </a>
+                <p class="product-price"><span class="old-price">{{products.price}}Rs.</span>{{products.total_price}}Rs.
+                </p>
+                <p class="product-desc">{{products.description}}</p>
+                <div class="d-flex p-2">
+                    <div
+                        style="width: 50px; background-color: rgb(255, 255, 255);border-radius: 50px;height: 50px;padding-left: 16px;margin-top: 17px;padding-top: 13px; border: 1px solid rgb(124, 122, 122);">
+                        <a href="" style="color: rgb(53, 51, 51);">{{products.size}}</a>
+                        <!-- <a href=""><p class="product-desc"><span>{{products.size1}}</span> <span>{{products.size2}}</span><span>{{products.size3}}</span></p></a> -->
+                    </div>
+                    <div
+                        style="width: 50px; background-color: rgb(255, 255, 255);border-radius: 50px;height: 50px;padding-left: 16px;margin-top: 17px;padding-top: 13px; border: 1px solid rgb(124, 122, 122);">
+                        <a href="" style="color: rgb(53, 51, 51);">{{products.size1}}</a>
+                        <!-- <a href=""><p class="product-desc"><span>{{products.size1}}</span> <span>{{products.size2}}</span><span>{{products.size3}}</span></p></a> -->
+                    </div>
+                    <div
+                        style="width: 50px; background-color: rgb(255, 255, 255);border-radius: 50px;height: 50px;padding-left: 16px;margin-top: 17px;padding-top: 13px; border: 1px solid rgb(124, 122, 122);">
+                        <a href="" style="color: rgb(53, 51, 51);">{{products.size2}}</a>
+                        <!-- <a href=""><p class="product-desc"><span>{{products.size1}}</span> <span>{{products.size2}}</span><span>{{products.size3}}</span></p></a> -->
+                    </div>
+                    <div
+                        style="width: 50px; background-color: rgb(255, 255, 255);border-radius: 50px;height: 50px;padding-left: 16px;margin-top: 17px;padding-top: 13px; border: 1px solid rgb(124, 122, 122);">
+                        <a href="" style="color: rgb(53, 51, 51);">{{products.size3}}</a>
+                        <!-- <a href=""><p class="product-desc"><span>{{products.size1}}</span> <span>{{products.size2}}</span><span>{{products.size3}}</span></p></a> -->
+                    </div>
+                </div>
+                <!-- Form -->
+                {% if products.stock <= 0 %} <p>out of stock</p>
+                    {% else %}
+                    <form class="cart-form clearfix" action="/cartadd">
+
+                        <div class="cart-fav-box d-flex align-items-center">
+                            <!-- Cart -->
+                            <input type="hidden" name="prod_id" id="prod_id" value={{products.id}}>
+
+                            <button type="submit" name="addtocart" value="5" class="btn essence-btn"
+                                style="margin-top: 20px;">Add to cart</button>
+                            <!-- Favourite -->
+                            <div class="product-favourite ml-4">
+                                <a href="#" class="favme fa fa-heart"></a>
+                            </div>
+                        </div>
+                    </form>
+                    {% endif %}
+            </div>
+        </div>
+
+    </div>
+</section>
+<!-- ##### Single Product Details Area End ##### -->
+
+
+<!-- ##### Footer Area Start ##### -->
+{% block js_block %}
+<script>
+    $(function () {
+        $('.previewPane, #zoomer').css('background-image', 'url(' + $('.imgkey').first().attr('src') + ')');
+        $('.imgkey').click(function () {
+            $('.previewPane').css('background-image', 'url(' + $(this).attr('src') + ')');
+        });
+        $('.previewPane').mousemove(function (ev) {
+            $('#zoomer').css('display', 'inline-block');
+            var img = $(this).css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1');
+            var posX = ev.offsetX ? (ev.offsetX) : ev.pageX - $(this).offset().left;
+            var posY = ev.offsetY ? (ev.offsetY) : ev.pageY - $(this).offset().top;
+            $('#zoomer').css('background-position', ((-posX * 3) + "px " + (-posY * 3) + "px"));
+            $('#zoomer').css('background-image', 'url(' + img + ')');
+        });
+        $('.previewPane').mouseleave(function () { $('#zoomer').css('display', 'none'); });
+    });
+</script>
+{%endblock%}
+
+{%endblock%}

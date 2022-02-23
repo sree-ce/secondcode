@@ -1,0 +1,53 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+  th{
+    color: black;
+    
+  }
+  td{
+    color: black;
+    font-size: small;
+  }
+
+</style>
+{%endblock%}
+<h2  style="background-color: rgb(58, 58, 160);color: white;text-align: center;">Users</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      
+      <th scope="col">Username</th>
+     
+      <th scope="col">First Name</th>
+      <th scope="col">Last Name</th>
+      
+      
+      <th scope="col">Phone Number</th>
+      <th scope="col">Email id</th>
+      <th scope="col">Block/Unblock</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for user in users %}
+    {% if user.is_superuser == 0 %}
+    <tr>
+      
+      <td>{{user.username}}</td>
+      <td>{{user.first_name}}</td>
+      <td>{{user.last_name}}</td>
+     
+      <td>{{user.phone_no}}</td>
+     
+
+      <td>{{user.email}}</td>
+      
+      <td><a href="{% url 'blockuser' user.id %}">{% if user.is_active%}<button type="submit" value="Block" style="background-color: rgb(77, 218, 77);border-radius: 4px;">Block</button>{% else %}
+      <button type="submit" value="Unblock" style="background-color: rgb(255, 19, 19);border-radius: 4px;">Unblock</button>{%endif%}</a></td>
+    </tr>
+    {% endif %}
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

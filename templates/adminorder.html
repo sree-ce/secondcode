@@ -1,0 +1,59 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+  th{
+    color: black;
+    
+  }
+  td{
+    color: black;
+    font-size: small;
+  }
+  .btn1{
+    background-color: rgb(37, 175, 173);
+    border: none;
+    margin-left: 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+
+  }
+</style>
+{%endblock%}
+<h2 style="background-color: blue;color: white;text-align: center;">Orders</h2>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      
+      <th scope="col">Username</th>
+      <th scope="col">Customer</th>
+      <th scope="col">Product</th>
+      <th scope="col">Quantity</th>
+      <th scope="col">Status</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for od in orders %}
+  
+    <tr>
+      
+      <td>{{od.user}}</td>
+      <td>{{od.customers.username}}</td>
+      <td>{{od.product}}</td>
+      <td>{{od.quantity}}</td>
+      <td>{{od.ordered}}</td>
+     {% if od.ordered != 'Delivered' and od.ordered != 'Cancelled' and od.ordered != 'Return' %}
+      <td><a href="{% url 'editorder' od.id %} "><input type="submit" value="Edit"
+        style="background-color: rgb(0, 225, 255);border-radius: 4px;margin-left: -18;"></a></td>
+      {% else %}
+
+  <td><a href="{% url 'editorder' od.id %} "><input type="submit" value="Edit"
+        style="background-color: rgb(0, 225, 255);border-radius: 4px;margin-left: -18;display: none;"></a></td>
+        {% endif %}
+  
+{% endfor %}
+  </tbody>
+</table>
+{% endblock %}

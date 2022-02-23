@@ -1,0 +1,54 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+    th{
+        color: black;
+        font-weight: bold;
+        font-size: large;
+    }
+    td{
+        color: black;
+    }
+</style>
+
+{%endblock%}
+
+<h2 style="background-color: rgb(17, 0, 255);color: rgb(255, 255, 255);text-align: center;">Product Offer</h2>
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">description</th>
+        <th scope="col">discount</th>
+        <th scope="col">Image</th>
+        <th scope="col">Submit</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for pdt in products %}
+      <form action="{% url 'productoffer' pdt.id %}" method="post">
+        {% csrf_token %}
+      <tr>
+        <td>{{pdt.Name}}</td>
+        <td>{{pdt.description}}</td>
+
+        <td><input type="number" style="width: 50px;" name="discount" id="discount" min="0" max="90"></td>
+
+        <td><img src="{{pdt.images.url}}" alt="" width="30px;height30px;"></td>
+
+
+        <td><input type="submit" value="Submit"
+          style="background-color: rgb(57, 192, 16);border-radius: 4px;"></a></td>
+        </form>
+        {% endfor%}
+    
+    </tbody>
+  </table>
+
+ 
+
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+  th{
+    color: black;
+    font-weight: bold;
+  }
+  td{
+    color: black;
+  }
+</style>
+
+{%endblock%}
+
+<h2 style="background-color: blue;color: white;text-align: center;">Variation Table</h2>
+
+<a href="{% url 'addvariation' %}"><input type="submit" value="Add Variations"
+  style="background-color: rgb(39, 186, 178);border-radius: 30px;border: none;color: white;font-weight: bold;"></a>
+
+<table class="table table-striped mt-2">
+  <thead>
+    <tr>
+ 
+      <th scope="col">Product</th>
+      <th scope="col">Variation Cateogry</th>
+      <th scope="col">Value</th>
+      <th scope="col">Is Active</th>
+    
+
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in variation %}
+    <tr>
+   
+      <td>{{i.product}}</td>
+      <td>{{i.variation_category}}</td>
+      <td>{{i.variation_value}}</td>
+      <td>{{i.is_active}}</td>
+     
+     
+     
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}

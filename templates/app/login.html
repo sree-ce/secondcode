@@ -1,0 +1,42 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock title %}
+{% block main-content %}
+<div class="container">
+ <div class="row my-3">
+  <div class="col-sm-6 offset-sm-3">
+   <h3>Login</h3>
+   <hr>
+   <div class="shadow p-5">
+   <form action="" method="post" novalidate >
+       {% csrf_token %}
+    <div class="mb-3">
+     <label for="exampleInputEmail1" class="form-label">Username</label>
+     <input type="text" class="form-control" id="exampleInputEmail1" name="username" aria-describedby="emailHelp">
+    </div>
+    <div class="mb-3">
+     <label for="exampleInputPassword1" class="form-label">Password</label>
+     <input type="password" class="form-control" id="exampleInputPassword1" name="password">
+    </div>
+    <input type="submit" class="btn mt-" style="width:450px;margin-top: 10px; background-color: rgb(252, 106, 8);height: 50px; color: white;" value="Login">
+</form>
+    <p style="margin-left: 206px;color: rgb(123, 118, 118);margin-top: 10px;">OR</p>
+    <div>
+        <form action="" method="post">
+            {%csrf_token%}
+    <button type="submit" class="btn  mt-" style="width:450px; background-color: rgb(255, 255, 255);border-bottom: 2px solid rgb(230, 226, 226);border-left:2px solid rgb(230, 226, 226);border-right: 2px solid rgb(230, 226, 226);color: blue;"><a href="phone" style="text-decoration: none;">Get OTP</a></button>
+</form>
+</div>
+    <div class="text-center text-primary fw-bold"><small>New to SleekStyle ? <a href="signup"
+       class="text-danger">Create an Account</a> </small></div>
+       <div style="color: red;">
+        {% for msg in messages %}
+        {{msg}}
+        {% endfor %}
+      </div>
+  
+</div>
+  </div>
+ </div>
+</div>
+{% endblock main-content %}

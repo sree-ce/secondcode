@@ -1,0 +1,147 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Orders{% endblock title %}
+{% block main-content %}
+
+<div class="container my-5">
+    <div class="row">
+        <h3>Welcome {{user}}</h3>
+        <div class="col-sm-2 border-end">
+            <ul class="list-unstyled">
+                <li class="d-grid"><a href="{% url 'orders' %}" class="btn btn-primary">Orders</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 offset-sm-1">
+            {% for op in order_placed%}
+            <div class="row shadow-sm mb-3">
+                <div class="col-sm-2">
+                    <img src="{{op.product.images.url}}" alt="" class="image-fluid" height="130" width="120">
+                </div>
+                <div class="col-sm-7">
+                    <p>Product:{{op.product.Name}}</p>
+                    <p>Quantity:{{op.quantity}}</p>
+                    <p>Total:{{op.total_cost}}</p>
+                    <p>Ordered Date:{{op.ordered_date}}</p>
+                </div>
+                <div class="col-sm-3 fw-bold">
+                    <p>Order Status:{{op.ordered}}</p>
+
+                    {% if op.ordered == 'Placed' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-secondary" role="progressbar" style="width: 10%;"
+                            aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    {% elif op.ordered == 'Packed' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-warning" role="progressbar" style="width: 30%;" aria-valuenow="20"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    {% elif op.ordered == 'Shipped' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: 70%;" aria-valuenow="40"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+
+                    {% elif op.ordered == 'Delivered' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                    {% elif op.ordered == 'Cancelled' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% elif op.ordered == 'Return' %}
+                    <div class="progress">
+                        <div class="progress-bar bg-dark" role="progressbar" style="width: 100%;" aria-valuenow="100"
+                            aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                    {% endif %}
+
+                 
+
+                    {% if op.ordered == 'Delivered' %}
+                    <div class="mt-3 ms-5">
+                        {% if op not in order_list %}
+                        <!-- Button trigger modal --> <button type="submit"
+                            style="background-color: rgb(237, 68, 50);color:white;border-radius:4px;margin-left: -39px; border: 1px solid black;"
+                            data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{op.id}}">Return Order</button>
+                            <p>3 Days to Return</p>
+                        <!-- Modal -->
+                        {% endif %}
+                       
+
+                        <div class="modal fade" id="exampleModalCenter{{op.id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content" style="background-color: rgb(192, 255, 249);">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Return Order</h5><button
+                                            type="submit" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body text-danger">Are you sure you want to Return Your Order?
+                                    </div>
+                                    <div class="modal-footer"> <button type="submit"
+                                            style="background-color: rgb(19, 19, 128);color: white;border-radius: 4px;border: none;"
+                                            data-bs-dismiss="modal">Close</button> <a
+                                            href="{% url 'returnorder' op.id %}" class=" text-light"><button
+                                                type="submit"
+                                                style="background-color: red;border-radius: 4px;color:white;border: none;">Return</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% elif op.ordered == 'Cancelled' %}
+                    <p style="font-weight: lighter;color:red">Order Cancelled</p>
+                    
+                    {% elif op.ordered == 'Return' %}
+                    <p style="font-weight: lighter;color:rgb(11, 72, 3)">Order Returned</p>
+                   
+                    {% else %}
+
+                    <div class="mt-3 ms-5">
+                        <!-- Button trigger modal --> <button type="submit"
+                            style="background-color: rgb(14, 230, 201);color:white;border-radius:4px;margin-left: -39px; border: 1px solid black;"
+                            data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{op.id}}">Cancel Order</button>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModalCenter{{op.id}}" tabindex="-1" role="dialog"
+                            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content" style="background-color: rgb(192, 255, 249);">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLongTitle">Cancel Order</h5><button
+                                            type="submit" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body text-danger">Are you sure you want to Cancel Your Order?
+                                    </div>
+                                    <div class="modal-footer"> <button type="submit"
+                                            style="background-color: rgb(19, 19, 128);color: white;border-radius: 4px;border: none;"
+                                            data-bs-dismiss="modal">Close</button> <a
+                                            href="{% url 'ordercancel' op.id %}" class=" text-light"><button
+                                                type="submit"
+                                                style="background-color: red;border-radius: 4px;color:white;border: none;">Cancel</button></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {% endif %}
+                  
+                </div>
+            </div>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

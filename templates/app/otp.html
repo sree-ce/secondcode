@@ -1,0 +1,63 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}OTP Login{% endblock title %}
+{% block main-content %}
+
+<style>
+    label{
+        display: none;
+    }
+</style>
+
+<br><br><br>
+<form action="" method="post" style="width: 25%;margin-left: 450px;">
+    {%csrf_token%}
+    {%load crispy_forms_tags%}
+  <h4>OTP Verification</h4>
+    {{forms|crispy}}
+<br>
+<div>
+  <span><p style="font-weight: bold;">Resend OTP in</span>&nbsp;&nbsp;<span style="color: red;" id="count"></p></span>
+  
+  <button type="submit" class="btn btn-primary " id="ver_btn" style="margin-left: 80px;">Verify</button>
+  <a href="resend"><button type="button" id="btn1" style="display: none;margin-left: 80px;" class="btn btn-primary">Resend</button></a>
+</div>
+
+
+</form>
+
+{% endblock main-content %}
+{% block js_block %}
+<script>
+  var i = 59;
+  var min = 0;
+  var sec = 59;
+
+  var x = setInterval(function(){
+    if(i>=0){
+      if (sec<59){
+        se='0'+sec
+      }
+      else{
+        se=sec
+      }
+      document.getElementById('count').innerHTML='0'+min+':'+se;
+      i--;
+      if (sec == 0){
+        sec = 59;
+        min--;
+      }
+      else{
+        --sec;
+      }
+    }
+    else{
+      clearInterval(x);
+      document.getElementById('btn1').style.display='block';
+      document.getElementById('ver_btn').style.display='none';
+    }
+  
+  },1000)
+</script>
+
+{%endblock%}

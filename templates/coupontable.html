@@ -1,0 +1,75 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+  th{
+    color: black;
+    font-weight: bold;
+  }
+  td{
+    color: black;
+  }
+</style>
+
+{%endblock%}
+
+<h2 style="background-color: blue;color: white;text-align: center;" class="shadow-lg" >Coupon Offer</h2>
+
+<a href="{% url 'couponoffer' %}"><input type="submit" value="Add Coupon"
+  style="background-color: rgb(0, 8, 255);border: 1px solid rgb(3, 3, 53);color: white;font-weight: bold; margin-left:950px;"></a>
+
+<table class="table table-striped mt-2">
+  <thead>
+    <tr>
+ 
+      <th scope="col">Code</th>
+      <th scope="col">Valid From</th>
+      <th scope="col">valid To</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Active</th>
+      <th scope="col">Delete </th>
+
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for cp in coupons %}
+    <tr>
+   
+      <td>{{cp.code}}</td>
+      <td>{{cp.valid_from}}</td>
+      <td>{{cp.valid_to}}</td>
+      <td>{{cp.discount}}</td>
+      <td>{{cp.active}}</td>
+      <td>
+        <!-- Button trigger modal --> <button type="submit" style="background-color: red;color:white;" data-toggle="modal"
+        data-target="#exampleModalCenter{{cp.id}}">Delete</button>
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModalCenter{{cp.id}}" tabindex="-1" role="dialog"
+          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Delete Coupon</h5><button type="button"
+                  class="close" data-dismiss="modal" aria-label="Close"> <span
+                    aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body text-danger">Are you sure you want to delete the coupon?
+              </div>
+              <div class="modal-footer"> <button type="button" style="background-color: rgb(19, 19, 128);color: white;border-radius: 4px;border: none;"
+                  data-dismiss="modal">Close</button> <a href="deletecoupon?id={{cp.id}}"
+                  class="text-light"><button type="submit" style="background-color: red;border-radius: 4px;color:white;border: none;">Delete</button></a>
+                </div>
+            </div>
+          </div>
+        </div>
+      </td>
+     
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+<div>
+    {% load crispy_forms_tags %}
+    <form action="" method="post" style="margin-left: 430px;">
+        {% csrf_token %}
+        <h3>Add Size</h3>
+   
+        {{fm|crispy}}
+
+        <br>
+        <br>
+     
+        <input type="submit" value="Add">
+ 
+    </form>
+    
+</div>
+{%endblock%}

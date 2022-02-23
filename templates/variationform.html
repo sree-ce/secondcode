@@ -1,0 +1,34 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+    label{
+        color: black;
+    }
+</style>
+{%endblock%}
+
+<h2 style="background-color: rgb(0, 38, 255); color: rgb(253, 253, 255);text-align: center;">Variations</h2>
+<div style="margin-left: 400px;">
+<form action="" method="post">
+    {% csrf_token %}
+    <label for="">Product</label> <br>
+    {{fm.product}} <br>
+    <label for="">Variation Cateogry</label> <br>
+    {{fm.variation_category}} <br>
+    <label for="">Variation Value</label> <br>
+    {{fm.variation_value}} <br>
+    <label for="">Is Active</label> <br>
+    {{fm.is_active}} <br>
+    
+    <div class="row" style="color: rgb(191, 12, 12);">
+        {% if fm.errors %}
+        {% for key,value in fm.errors.items %}
+        <p style="color: red;">{{value}}</p>
+        {% endfor %}
+        {% endif %}
+    </div>
+    <input type="submit" value="Apply" style="margin-left: 55px;">
+</form>
+</div>
+{%endblock%}

@@ -1,0 +1,149 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+<!-- Mirrored from technext.github.io/essence/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jan 2022 07:44:34 GMT -->
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=utf-8" /><!-- /Added by HTTrack -->
+<head>
+    <meta charset="UTF-8">
+    <meta name="description" content="">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- The above 4 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+    <!-- Title  -->
+    <title>Essence - Fashion Ecommerce Template</title>
+
+    <!-- Favicon  -->
+    <link rel="icon" href="{% static 'img/core-img/favicon.ico' %}">
+    <!-- Core Style CSS -->
+    <link rel="stylesheet" href="{% static 'css/core-style.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+
+    {% block css_block %}
+
+    {%endblock%}
+
+</head>
+
+<body>
+    <!-- ##### Header Area Start ##### -->
+    <header class="header_area">
+        <div class="classy-nav-container breakpoint-off d-flex align-items-center justify-content-between">
+            <!-- Classy Menu -->
+            <nav class="classy-navbar" id="essenceNav">
+                <!-- Logo -->
+                <a class="nav-brand" href="index-2.html"><img src="{% static 'img/core-img/logo.png' %}" alt=""></a>
+                <!-- Navbar Toggler -->
+                <div class="classy-navbar-toggler">
+                    <span class="navbarToggler"><span></span><span></span><span></span></span>
+                </div>
+                <!-- Menu -->
+                <div class="classy-menu">
+                    <!-- close btn -->
+                    <div class="classycloseIcon">
+                        <div class="cross-wrap"><span class="top"></span><span class="bottom"></span></div>
+                    </div>
+                    <!-- Nav Start -->
+                    <div class="classynav">
+                        <ul>
+                            <li><a href="#">Shop</a>
+                                <div class="megamenu">
+                                    <ul class="single-mega cn-col-4">
+                                        <li class="title">Women's Collection</li>
+                                        <li><a href="shop.html">Dresses</a></li>
+                                        <li><a href="shop.html">Blouses &amp; Shirts</a></li>
+                                        <li><a href="shop.html">T-shirts</a></li>
+                                        <li><a href="shop.html">Rompers</a></li>
+                                        <li><a href="shop.html">Bras &amp; Panties</a></li>
+                                    </ul>
+                                 
+                                    <ul class="single-mega cn-col-4">
+                                        <li class="title">Kid's Collection</li>
+                                        <li><a href="shop.html">Dresses</a></li>
+                                        <li><a href="shop.html">Shirts</a></li>
+                                        <li><a href="shop.html">T-shirts</a></li>
+                                        <li><a href="shop.html">Jackets</a></li>
+                                        <li><a href="shop.html">Trench</a></li>
+                                    </ul>
+                                
+                                </div>
+                            </li>
+                            <li><a href="#">Pages</a>
+                                <ul class="dropdown">
+                                    <li><a href="index-2.html">Home</a></li>
+                                   
+                                    <li><a href="single-product-details.html">Product Details</a></li>
+                                    <li><a href="checkout.html">Checkout</a></li>
+                                    
+                                </ul>
+                            </li>
+                           
+                        </ul>
+                    </div>
+                    <!-- Nav End -->
+                </div>
+            </nav>
+
+            <!-- Header Meta Data -->
+            <div class="header-meta d-flex clearfix justify-content-end">
+                <!-- Search Area -->
+                <div class="search-area">
+                    <form action="#" method="post">
+                        <input type="search" name="search" id="headerSearch" placeholder="Type for search">
+                        <button type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                    </form>
+                </div>
+                <!-- Favourite Area -->
+                <div class="favourite-area">
+                    <a href="#"><img src="{% static 'img/core-img/heart.svg' %}" alt=""></a>
+                </div>
+                <!-- User Login Info -->
+                <div class="user-login-info">
+                    {% if user %}
+                   
+                    <a href="signout" style="font-size: smaller;color:rgb(107, 107, 107)">{{user}}/Logout</a>
+                    <!-- <a href="signout" style="font-size: smaller;color:rgb(107, 107, 107)">Logout</a> -->
+              
+                    {% else %}
+                    <!-- <a href="signin"><img src="{% static 'img/core-img/user.svg' %}" alt=""></a> -->
+                    <a href="signin" style="font-size: smaller;color:rgb(107, 107, 107)">Login/register</a>
+                    {% endif %}
+                </div>
+                <!-- Cart Area -->
+                <div class="cart-area">
+                    <a href="/showcart" id="essenceCartBtn"><img src="{% static 'img/core-img/bag.svg' %}" alt=""> <span></span></a>
+                </div>
+            </div>
+
+        </div>
+    </header>
+   {% block content%}
+
+   {%endblock%}
+    <!-- ##### Footer Area Start ##### -->
+  
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- jQuery (Necessary for All JavaScript Plugins) -->
+    <script src="{% static 'js/jquery/jquery-2.2.4.min.js' %}"></script>
+    <!-- Popper js -->
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <!-- Bootstrap js -->
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <!-- Plugins js -->
+    <script src="{% static 'js/plugins.js' %}"></script>
+    <!-- Classy Nav js -->
+    <script src="{% static 'js/classy-nav.min.js' %}"></script>
+    <!-- Active js -->
+    <script src="{% static 'js/active.js' %}"></script>
+    {% block js_block %}
+
+    {%endblock%}
+
+</body>
+
+
+<!-- Mirrored from technext.github.io/essence/ by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jan 2022 07:45:22 GMT -->
+</html>

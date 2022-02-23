@@ -1,0 +1,50 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+    th{
+        color: black;
+        font-weight: bold;
+        font-size: large;
+    }
+    td{
+        color: black;
+    }
+</style>
+
+{%endblock%}
+
+<h2 style="background-color: blue;color: white;text-align: center;">Edit Offer</h2>
+
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        
+        <th scope="col">discount</th>
+  
+        <th scope="col">Submit</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for sub in subcategories %}
+      <form action="{% url 'suboffer' sub.id %}" method="post">
+        {% csrf_token %}
+      <tr>
+        <td>{{sub.name}}</td>
+        
+
+        <td><input type="number" style="width: 50px;" name="discount" id="discount" min="0" max="90"></td>
+
+        <td><input type="submit" value="Submit"
+          style="background-color: rgb(57, 192, 16);border-radius: 4px;"></a></td>
+        </form>
+        {% endfor %}
+    </tbody>
+  </table>
+
+ 
+
+{% endblock %}

@@ -1,0 +1,137 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Customer Registration{% endblock title %}
+{% block main-content %}
+{% block css_block %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat&display=swap');
+
+body {
+    background-color: #ffe8d2;
+    font-family: 'Montserrat', sans-serif
+}
+
+.card {
+    border: none
+}
+
+.logo {
+    background-color: #eeeeeea8
+}
+
+.totals tr td {
+    font-size: 13px
+}
+
+.footer {
+    background-color: #eeeeeea8
+}
+
+.footer span {
+    font-size: 12px
+}
+
+.product-qty span {
+    font-size: 12px;
+    color: #dedbdb
+}
+</style>
+
+{% endblock %}
+<div class="container mt-5 mb-5">
+    <div class="row d-flex justify-content-center">
+        <div class="col-md-8">
+          
+            <div class="card">
+                <div class="text-left logo p-2 px-5"> <img src="https://i.imgur.com/2zDU056.png" width="50"> </div>
+               
+                <div class="invoice p-5">
+                   {% for i in invoice_details %}
+                    <h5>Your order Confirmed!</h5> <span class="font-weight-bold d-block mt-4">{{i.user}}</span> <span style="color: green;">You order has been confirmed </span>
+                    <div class="payment border-top mt-3 mb-3 border-bottom table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="py-2"> <span class="d-block text-muted">Order Date</span> <span>{{i.ordered_date }}</span> </div>
+                                    </td>
+                                    <td>
+                                        <div class="py-2"> <span class="d-block text-muted">Order No</span> <span>{{i.id}}</span> </div>
+                                    </td>
+                                  
+                                    <td>
+                                        <div class="py-2"> <span class="d-block text-muted">Shiping Address</span> <span>{{i.customers.address}}</span> </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="product border-bottom table-responsive">
+                        <table class="table table-borderless">
+                            <tbody>
+                                <tr>
+                                    <td width="20%"> <img src="{{i.product.images.url}}" width="90"> </td>
+                                    <td width="60%"> <span class="font-weight-bold">{{i.product.Name}}</span>
+                                        <div class="product-qty"> <span class="d-block" style="color: black;">Quantity:{{i.quantity}}</span> <span></span> </div>
+                                    </td>
+                                    <td width="20%">
+                                        <div class="text-right"> <span class="font-weight-bold">{{i.product.total_price}}</span> </div>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-md-5">
+                            <table class="table table-borderless">
+                                <tbody class="totals">
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">Subtotal</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right"> <span>{{i.product.total_price}}</span> </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">Shipping Fee</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right"> <span>40</span> </div>
+                                        </td>
+                                    </tr>
+                                  
+                                    <tr>
+                                        <td>
+                                            <div class="text-left"> <span class="text-muted">Discount</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right"> <span class="text-success">{{i.product.discount}}</span> </div>
+                                        </td>
+                                    </tr>
+                                    <tr class="border-top border-bottom">
+                                        <td>
+                                            <div class="text-left"> <span class="font-weight-bold">Subtotal</span> </div>
+                                        </td>
+                                        <td>
+                                            <div class="text-right"> <span class="font-weight-bold">{{i.total_cost}}</span> </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <p>We will be sending shipping confirmation email when the item shipped successfully!</p>
+                    {% endfor %}
+                </div>
+              
+             
+               
+            </div>
+       
+        </div>
+    </div>
+</div>
+{% endblock main-content %}

@@ -1,0 +1,35 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+
+<style>
+    label{
+        color: black;
+    }
+</style>
+{%endblock%}
+<h3 style="background-color: blue;color: white;text-align: center;">Add Category</h3>
+<div style="width: 65%;margin-left: 400px;">
+    {% load crispy_forms_tags %}
+    <form action="" method="post">
+        {% csrf_token %}
+        
+        <div class="row" style="color: rgb(191, 12, 12);">
+            {% if editform.errors %}
+            {% for key,value in editform.errors.items %}
+            <p style="color: red;">{{key}}:{{value}}</p>
+            {% endfor %}
+            {% endif %}
+        </div>
+    
+       <label for="">Category Name</label> <br>
+        {{editform.name}}
+
+        <br><br>
+        <input type="submit" value="Add" style="background-color: rgb(9, 255, 255);margin-left: 75px;border-radius: 4px;">
+ 
+    </form>
+</div>
+
+
+{% endblock %}

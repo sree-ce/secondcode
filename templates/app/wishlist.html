@@ -1,0 +1,146 @@
+{% extends 'app/header.html' %}
+{% load static %}
+{% block title %}Wishlist{% endblock title %}
+{% block main-content %}
+<div style="margin-left: 30px; ">
+    <br>
+    <h3>My Wishlist</h3>
+</div>
+<br>
+{% for pdt in wishlist %}
+<div>
+    <a href="{% url 'singleproduct' pdt.product.id %}" style="text-decoration: none;">
+        <div class="card"
+            style="width:250px; float: left; margin-left: 30px; background-color: rgba(175, 172, 172, 0.255);">
+
+            
+            <img src="{{pdt.product.images.url}}" class="card-img-top" alt="...">
+
+            <div class="card-body">
+
+                <h5 class="card-title" style="color: black;">{{pdt.product.Name}}</h5>
+                {% if pdt.product.discount != 0 %}
+                <p class="card-text" style="font-size: medium;color: rgb(0, 0, 0);">
+                    {{pdt.product.total_price}}Rs.<span class="card-text"
+                        style="font-size: medium;color: rgb(82, 79, 79); text-decoration: line-through; margin-left: 10px;">{{pdt.product.price}}Rs.</span>
+
+                    <span class="card-text"
+                        style="font-size: small;color: rgb(250, 30, 14); margin-left: 5px;">({{pdt.product.discount}}%)</span>
+                </p>
+
+                {% else %}
+                <p class="card-text" style="font-size: medium;color: rgb(0, 0, 0);">
+                    {{pdt.product.total_price}}Rs.
+
+                    <span class="card-text"
+                        style="font-size: small;color: rgb(250, 30, 14); margin-left: 5px;display: none;">({{pdt.product.discount}}%)</span>
+                </p>
+                {% endif %}
+                <select name="size" onchange="getsize(event)" style="height: 20px;font-size: small;margin-left: 50px;">
+                    <option>Choose Size</option>
+                    {% for i in variation %}
+                    {% if pdt.product == i.product %}
+                    <option value="{{ i.variation_value }}">{{ i.variation_value }}</option>
+                    {% endif %}
+                    {% endfor %}
+                </select>
+
+            </div>
+  
+    </a>
+    <div class="row d-inline">
+
+        <button type="button" onclick="cart({{pdt.product.id}})"
+            style="background-color: rgb(187, 9, 122);border: none;width: 50px;margin-left: 100px;">
+            <i class="fa fa-shopping-cart" style="color: rgb(255, 255, 255);"></i>
+        </button>
+
+
+    </div>
+    <a href="removewishlist" data-bs-toggle="modal" data-bs-target="#exampleModalCenter{{pdt.id}}"
+    style="background-color: rgba(250, 246, 246, 0.919);"><i class="fa fa-times"
+        style="margin-left: 200px;color: rgb(155, 147, 147);"></i></a>
+
+<div class="modal fade" id="exampleModalCenter{{pdt.id}}" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Remove product</h5><button type="button"
+                    class="close" data-bs-dismiss="modal" aria-label="Close"> <span
+                        aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body text-danger">Are you sure you want to remove this product?
+            </div>
+            <div class="modal-footer"> <button type="button"
+                    style="background-color: rgba(131, 127, 127, 0.898);color: white;border-radius: 4px;border: none;"
+                    data-bs-dismiss="modal">Close</button>
+
+                <a href="removewishlist?id={{pdt.id}}"><button type="submit"
+                        style="background-color: rgb(58, 56, 56);border-radius: 4px;color:white;border: none;">Remove</button></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+{% endfor %}
+
+
+</div>
+<form action="/cartadd" method="get" id="cform">
+    <input type="hidden" id="get_size" name="get_size" value="">
+    <input type="hidden" id="mode" name="mode" value="">
+    <input type="hidden" id="proid" name="proid" value="">
+  </form>
+
+
+</div>
+{% block js_block %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function getsize(e) {
+    console.log(e.target.value)
+    document.getElementById('get_size').value = e.target.value
+
+  }
+  function cart(a) {
+    console.log(a)
+    document.getElementById('mode').value = 0
+    document.getElementById('proid').value = a
+    if (document.getElementById('get_size').value == '') {
+      swal.fire('choose size')
+    }
+    else {
+      document.getElementById('cform').submit();
+    }
+
+  }
+  function buy(a) {
+    console.log(a)
+    document.getElementById('mode').value = 1
+    document.getElementById('proid').value = a
+    if (document.getElementById('get_size').value == '') {
+      swal.fire('choose size')
+    }
+    else {
+      document.getElementById('cform').submit();
+    }
+
+
+  }
+  function wish(a) {
+    document.getElementById('list').value = a
+    document.getElementById('wish').submit();
+  }
+  function add_wish() {
+    swal.fire('Already added to your wishlist')
+  }
+</script>
+{% endblock %}
+
+{% endblock main-content %}

@@ -1,0 +1,212 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% load static %}
+<style>
+    h5,
+    td {
+        color: black;
+    }
+
+    th {
+        font-weight: bold;
+        color: black;
+    }
+
+    body {
+        font-family: sans-serif;
+        text-align: center;
+    }
+</style>
+<div class="container-fluid">
+
+
+
+    <!-- Content Row -->
+    <div class="row">
+
+        <!-- Earnings (Monthly) Card Example -->
+        <div class="col-xl-3 col-md-6 mb-4" id="d1-pdf">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+
+                            <a href="" style="text-decoration: none;">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Download as pdf</div>
+                            </a>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-download fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Earnings (Monthly) Card Example -->
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <a href="{% url 'export_excel' %}" style="text-decoration: none;">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                    Download as excell</div>
+                            </a>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800"></div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-download fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div class="d-flex">
+        <form action="{% url 'daily_report' %}" method="post">
+            {% csrf_token %}
+            <h3>Daily Report</h3>
+            <br>
+            <label for="">From:</label>
+            <input type="date" name="from" id="dayfrom" placeholder="from"
+                style="height: 25px;width: 150px;color: rgba(0, 0, 0, 0.583);" onclick="fromclick()" ><br><br>
+            <label for="">To:</label>
+            <input type="date" name="to" id="dayto" placeholder="to"
+                style="height: 25px;width: 150px;color: rgba(0, 0, 0, 0.583);" onclick="toclick()"><br><br>
+
+            <button type="submit"
+                style="width: 153px;background-color: rgba(1, 1, 225, 0.85);color: white;  margin-left: 30px;"
+                class="shadow-lg">Generate</button>
+        </form>
+        <div>
+            <form action="{% url 'year_report' %}" method="post" style="margin-left: 30px;">
+                {% csrf_token %}
+                <h3>Yearly Report</h3>
+                <br>
+                <input type="text" name="year" id="" placeholder="Year" style="height: 25px;width: 150px;"><br><br>
+                <button type="submit" style="width: 153px;background-color: rgba(1, 1, 225, 0.85);color: white;"
+                    class="shadow-lg">Generate</button>
+            </form>
+        </div>
+        <div>
+            <form action="{% url 'month_report' %}" method="post" style="margin-left: 20px;">
+                {% csrf_token %}
+                <h3>Monthly Report</h3>
+                <br>
+                <input type="month" name="month" id="" style="height: 25px;width: 150px;" ><br><br>
+                <button type="submit" style="width: 153px;background-color: rgba(1, 1, 225, 0.85);color: white;"
+                    class="shadow-lg">Generate</button>
+            </form>
+        </div>
+    </div>
+
+    <table class="table table-striped" id="example-table">
+        <br>
+        {% if report %}
+        <h3>Sales Report</h3>
+        <thead>
+
+            <tr>
+                <th scope="col">ORDERED DATE</th>
+                <th scope="col">PRODUCTS</th>
+
+
+                <th scope="col">TOTAL</th>
+
+
+            </tr>
+        </thead>
+        <tbody>
+           
+            {% for s in report %}
+            <tr>
+                <td>{{s.ordered_date}}</td>
+
+                <td>{{s.product.Name}}</td>
+
+                <td>{{s.total}}</td>
+            </tr>
+            {% endfor %}
+         
+        </tbody>
+    </table>
+    {% else %}
+    <p>No Repots</p>
+    {% endif %}
+
+    {% block js_block %}
+    <script src="{% static 'js3/html2pdf.bundle.min.js' %}"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript">
+
+        document.getElementById('d1-pdf').onclick = function () {
+            var element = document.getElementById('example-table');
+
+            var opt = {
+                margin: 1,
+                filename: 'report.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            html2pdf(element, opt);
+        };
+
+        function fromclick() {
+            var to = document.getElementById('dayto').value
+            var from = document.getElementById('dayfrom')
+            if (to == "") {
+                var nowDate = new Date();
+                var date = nowDate.getFullYear() + '-'
+                if ((nowDate.getMonth() + 1) < 10) {
+                    date += '0' + (nowDate.getMonth() + 1) + '-'
+                }
+                else {
+                    date += (nowDate.getMonth() + 1) + '-'
+                }
+                if (nowDate.getDate() < 10) {
+                    date += '0' + nowDate.getDate()
+                }
+                else {
+                    date += nowDate.getDate()
+                } from.setAttribute("max", date);
+            }
+            else {
+                from.setAttribute("max", to);
+            }
+        } 
+        function toclick() {
+            var to = document.getElementById('dayto')
+            var from = document.getElementById('dayfrom').value
+            var nowDate = new Date();
+            var date = nowDate.getFullYear() + '-'
+            if ((nowDate.getMonth() + 1) < 10) {
+                date += '0' + (nowDate.getMonth() + 1) + '-'
+            }
+            else {
+                date += (nowDate.getMonth() + 1) + '-'
+            }
+            if (nowDate.getDate() < 10) {
+                date += '0' + nowDate.getDate()
+            } else {
+                date += nowDate.getDate()
+            }
+            to.setAttribute("max", date);
+            if (from != "") {
+                to.setAttribute("min", from);
+            }
+        }
+
+    </script>
+
+
+    {%endblock%}
+
+    {%endblock%}

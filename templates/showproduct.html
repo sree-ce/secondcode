@@ -1,0 +1,97 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+  th{
+    color: black;
+    
+  }
+  td{
+    color: black;
+    font-size: small;
+  }
+  .btn1{
+    background-color: rgb(37, 175, 173);
+    border: none;
+    margin-left: 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+
+  }
+</style>
+{%endblock%}
+
+
+<h2 style="background-color: rgb(17, 0, 255); color: rgb(255, 255, 255);text-align: center;">Products</h2>
+
+<a href="addproduct"><input type="submit" value="Add Product"
+ class="btn1" ></a>
+
+<table class="table table-striped mt-2">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">description</th>
+      <th scope="col">category</th>
+      <th scope="col">discount</th>
+      <th scope="col">price</th>
+      <th scope="col">stock</th>
+      <th scope="col">color</th>
+      <th scope="col">size</th>
+      <th scope="col">images</th>
+      <th scope="col">images2</th>
+      <th scope="col">total_price</th>
+      <th scope="col">Block/Unblock</th>
+
+    </tr>
+  </thead>
+  <tbody>
+   
+    {% for pdt in products %}
+    <tr>
+      <td>{{pdt.Name}}</td>
+      <td>{{pdt.description}}</td>
+      <td>{{pdt.category}}</td>
+      <td>{{pdt.discount}}</td>
+      <td>{{pdt.price}}</td>
+      <td>{{pdt.stock}}</td>
+      <td>{{pdt.color}}</td>
+      <td>{{pdt.size}}</td>
+      <td><img src="{{pdt.images.url}}" alt="" width="30px;height30px;"></td>
+      <td><img src="{{pdt.images2.url}}" alt="" width="30px;height30px;"></td>
+      <td>{{pdt.total_price}}</td>
+      <td><a href=" {% url 'editpdt' pdt.id %} "><input type="submit" value="Edit"
+            style="background-color: rgb(0, 225, 255);border-radius: 4px;margin-left: -18;"></a></td>
+
+     
+     <td>
+       <!-- Button trigger modal --> <button type="submit" style="background-color: red;color:white;border-radius:4px;margin-left: -70px;" data-toggle="modal"
+       data-target="#exampleModalCenter{{pdt.id}}">Delete</button>
+       <!-- Modal -->
+       <div class="modal fade" id="exampleModalCenter{{pdt.id}}" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+         <div class="modal-dialog modal-dialog-centered" role="document">
+           <div class="modal-content">
+             <div class="modal-header">
+               <h5 class="modal-title" id="exampleModalLongTitle">Delete product</h5><button type="button"
+                 class="close" data-dismiss="modal" aria-label="Close"> <span
+                   aria-hidden="true">&times;</span></button>
+             </div>
+             <div class="modal-body text-danger">Are you sure you want to delete?
+             </div>
+             <div class="modal-footer"> <button type="button" style="background-color: rgb(19, 19, 128);color: white;border-radius: 4px;border: none;"
+                 data-dismiss="modal">Close</button> <a href="deletepdt?id={{pdt.id}}"
+                 class="text-light"><button type="submit" style="background-color: red;border-radius: 4px;color:white;border: none;">Delete</button></a>
+               </div>
+           </div>
+         </div>
+       </div>
+     </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}

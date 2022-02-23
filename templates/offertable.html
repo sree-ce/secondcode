@@ -1,0 +1,64 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+    th{
+        color: black;
+        font-weight: bold;
+        font-size: large;
+    }
+    td{
+        color: black;
+    }
+    .btn2{
+        background-color: rgb(37, 175, 173);
+        border: none;
+        margin-left: 10px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+    }
+
+</style>
+
+{%endblock%}
+
+<h2 style="background-color: rgb(0, 38, 255); color: rgb(253, 253, 255);text-align: center;">Product Offer</h2>
+
+<a href="{% url 'offerview' %}"><input type="submit" value="Edit Offer"
+    class="btn2"></a>
+    <br>
+  <table class="table table-striped mt-2">
+    
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">description</th>
+        <th scope="col">discount</th>
+        <th scope="col">Image</th>
+      
+
+      </tr>
+    </thead>
+    <tbody>
+      {% for pdt in products %}
+      <form action="{% url 'productoffer' pdt.id %}" method="post">
+        {% csrf_token %}
+      <tr>
+        <td>{{pdt.Name}}</td>
+        <td>{{pdt.description}}</td>
+        <td>{{pdt.discount}}</td>
+        
+
+        <td><img src="{{pdt.images.url}}" alt="" width="30px;height30px;"></td>
+
+
+
+        </form>
+        {% endfor %}
+    </tbody>
+  </table>
+
+ 
+
+{% endblock %}

@@ -1,0 +1,220 @@
+{% extends 'app/base.html' %}
+{% load static %}
+{% block title %}Product Detail{% endblock title %}
+{% block main-content %}
+
+{% block css_block %}
+<style>
+    .imgkey {
+        width: 115px;
+        height: 120px;
+        border: 1px solid black;
+
+    }
+
+    .previewPane {
+        /*display:inline-block:*/
+
+        width: 300px;
+        height: 300px;
+        background-repeat: no-repeat;
+        cursor: crosshair;
+        background-size: 100%;
+        margin-left: 31px;
+        margin-top: 50px;
+    }
+
+    #zoomer {
+        border: 1px solid black;
+        margin-top: 0px;
+        margin-left: 0px;
+        /*background: #fff;*/
+        display: none;
+        background-repeat: no-repeat;
+        width:500px;
+        height: 500px;
+        z-index: 1000;
+        position: fixed;
+        right: 10%;
+        top: 13%;
+        border: none;
+    }
+
+    /* .imgkey {
+        display: none;
+    }*/
+    .card {
+        background-color: #fff0;
+    }
+</style>
+<script src="https//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+{%endblock%}
+
+<div class="container">
+    <div class="row ">
+
+        <div class="col-lg-6 ">
+            <div class=" card " style=" border: none;background-color: #fff0;">
+                <div class="previewPane shadow-sm"></div>
+
+
+                <div id="zoomer" class="shadow-lg"></div>
+                <div class="imgline" style=" margin-top: 40px;margin-left: 50px;">
+
+                    <img src="{{products.images.url}}" class="imgkey shadow-lg" alt="...">
+
+                    <img src="{{products.images2.url}}" class="imgkey shadow-lg" alt="...">
+
+                    <img src="{{products.images3.url}}" class="imgkey shadow-lg" alt="...">
+                </div>
+
+
+
+            </div>
+
+        </div>
+
+
+        <div class="col-sm-5 offset-sm-1 mt-3">
+            <h2>{{products.Name}}</h2>
+            <hr>
+            <h2 style="font-weight:lighter ;">{{products.description}}</h2>
+
+
+
+
+
+            <p style="color: rgb(218, 19, 19);">(-{{products.discount}}%) <span
+                    style="color: green; font-weight: bolder;">OFF<span> </p>
+            <h5>{{products.total_price}}Rs.&nbsp;&nbsp;M.R.P:<small
+                    class="fw-light text-decoration-line-through ms-2">{{products.price}}Rs.</small></h5> <br>
+
+            <select name="size" onchange="getsize(event)" style="color: rgba(0, 0, 0, 0.72);">
+                <option>Choose Size</option>
+                {% for i in variation %}
+                {% if products == i.product %}
+                <option value="{{ i.variation_value }}">{{ i.variation_value }}</option>
+                {% endif %}
+                {% endfor %}
+            </select>
+
+            <br><br>
+            <div class="row d-inline">
+
+                <button type="button" onclick="cart({{products.id}})" class="btn btn-primary"
+                    style="border: none;width: 50px;margin-left: 15px;">
+                    <i class="fa fa-shopping-cart" style="color: rgb(255, 255, 255);"></i></button>
+
+                {% if user %}
+
+                <button type="button" onclick="buy({{products.id}})" class="btn btn-primary"
+                    style="border: none;width: 70px; color: white;">
+                    Buy</button>
+                {% else %}
+
+                <button type="button" onclick="buy({{products.id}})" class="btn btn-primary"
+                    style="border: none;width: 70px; color: white;display: none;">
+                    Buy</button>
+                {% endif %}
+                {% if user %}
+                {% if products not in wishlist %}
+                <button type="button" onclick="wish({{products.id}})" class="btn btn-primary"
+                    style="border: none;width: 50px;">
+                    <i class="fa fa-heart" style="color: rgb(255, 255, 255);"></i></button>
+                {% else %}
+                <button type="button" onclick="add_wish({{pdproductst.id}})"class="btn btn-primary"
+                    style="border: none;width: 50px;">
+                    <i class="fa fa-heart" style="color: rgb(0, 0, 0);"></i></button>
+                {% endif %}
+                {% endif %}
+
+            </div>
+
+            <form action="/cartadd" method="get" id="cform">
+                <input type="hidden" id="get_size" name="get_size" value="">
+                <input type="hidden" id="mode" name="mode" value="">
+                <input type="hidden" id="proid" name="proid" value="">
+              </form>
+              <form action="/wishlist" method="get" id="wish">
+                <input type="hidden" id="list" name="wish_list" value="">
+              </form>
+
+
+        </div>
+
+    </div>
+</div>
+</div>
+{% block js_block %}
+<script>
+    $(function () {
+        $('.previewPane, #zoomer').css('background-image', 'url(' + $('.imgkey').first().attr('src') + ')');
+        $('.imgkey').click(function () {
+            $('.previewPane').css('background-image', 'url(' + $(this).attr('src') + ')');
+        });
+        $('.previewPane').mousemove(function (ev) {
+            $('#zoomer').css('display', 'inline-block');
+            var img = $(this).css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1');
+            var posX = ev.offsetX ? (ev.offsetX) : ev.pageX - $(this).offset().left;
+            var posY = ev.offsetY ? (ev.offsetY) : ev.pageY - $(this).offset().top;
+            $('#zoomer').css('background-position', ((-posX * 3) + "px " + (-posY * 3) + "px"));
+            $('#zoomer').css('background-image', 'url(' + img + ')');
+        });
+        $('.previewPane').mouseleave(function () { $('#zoomer').css('display', 'none'); });
+    });
+
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
+    integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
+    integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+
+    <script>
+        function getsize(e) {
+          console.log(e.target.value)
+          document.getElementById('get_size').value = e.target.value
+    
+        }
+        function cart(a){
+          console.log(a)
+          document.getElementById('mode').value = 0
+          document.getElementById('proid').value = a
+          if(document.getElementById('get_size').value==''){
+            swal.fire('choose size')
+          }
+          else{
+            document.getElementById('cform').submit();
+          }
+          
+        }
+        function buy(a){
+          console.log(a)
+          document.getElementById('mode').value = 1
+          document.getElementById('proid').value = a
+          if(document.getElementById('get_size').value==''){
+            swal.fire('choose size')
+          }
+          else{
+            document.getElementById('cform').submit();
+          }
+          
+          
+        }
+        function wish(a){
+          document.getElementById('list').value = a
+          document.getElementById('wish').submit();
+        }
+        function add_wish(){
+          swal.fire('Already added to your wishlist')
+        }
+      </script>
+{%endblock%}
+{% endblock main-content %}

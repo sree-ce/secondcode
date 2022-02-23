@@ -1,0 +1,79 @@
+{% extends 'adminbase.html' %}
+{% block content %}
+{% block css_block %}
+<style>
+  th{
+    color: black;
+    
+  }
+  td{
+    color: black;
+    font-size: small;
+  }
+  .btn1{
+    background-color: rgb(37, 175, 173);
+    border: none;
+    margin-left: 10px;
+    border-radius: 20px;
+    color: white;
+    font-weight: bold;
+
+  }
+</style>
+{%endblock%}
+<h2 style="background-color: blue;color: white;text-align: center;">Categories</h2>
+
+<a href="addsubcategory"><input type="submit" value="Add Categories"
+  class="btn1" ></a>
+
+<table class="table table-striped mt-2" style="width:100%;">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Discount</th>
+      <th scope="col">Edit/Delete</th>
+
+    </tr>
+  </thead>
+  <tbody>
+    {% for category in subcategory %}
+    <tr>
+      <!-- <th scope="row"></th> -->
+      <td>{{category.name}}</td>
+      <td>{{category.discount}}</td>
+
+      <td><a href="{% url 'editsubcategory' category.id %}"><input type="submit" value="Edit"
+            style="background-color: rgb(0, 225, 255);border-radius: 4px;"></a></td>
+            <td>
+              <!-- Button trigger modal --> <button type="submit" style="background-color: red;color:white;border-radius:4px;margin-left: -340px;" data-toggle="modal"
+                data-target="#exampleModalCenter{{category.id}}">Delete</button>
+              <!-- Modal -->
+              <div class="modal fade" id="exampleModalCenter{{category.id}}" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLongTitle">Delete product</h5><button type="button"
+                        class="close" data-dismiss="modal" aria-label="Close"> <span
+                          aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body text-danger">Are you sure you want to delete
+                    </div>
+                    <div class="modal-footer"> <button type="button" style="background-color: rgb(19, 19, 128);color: white;border-radius: 4px;border: none;"
+                        data-dismiss="modal">Close</button> <a href="deletesubcategory?id={{category.id}}"
+                        class="text-light"><button type="submit" style="background-color: red;border-radius: 4px;color:white;border: none;">Delete</button></a>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+       
+    {% endfor %}
+
+  </tbody>
+
+</table>
+
+
+{% endblock %}
